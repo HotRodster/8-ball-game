@@ -41,12 +41,43 @@ def drawTable(win):
     x = x0
     y = y0
     radius = (2.5/114)*WIDTH
-    pocket = Circle(Point(x,y),radius)
+    pocket1 = Circle(Point(x,y),radius)
+    pocket1.setFill("black")
+
+    x = (xf - x0)/2 + x0
+    y = y0
+    pocket2 = Circle(Point(x,y),radius)
+    pocket2.setFill("black")
+
+    x = xf
+    y = y0
+    pocket3 = Circle(Point(x,y),radius)
+    pocket3.setFill("black")
+
+    x = x0
+    y = yf
+    pocket4 = Circle(Point(x,y),radius)
+    pocket4.setFill("black")
+    
+    x = (xf - x0)/2 +x0
+    y = yf
+    pocket5 = Circle(Point(x,y),radius)
+    pocket5.setFill("black")
+    
+    x = xf
+    y = yf
+    pocket6 = Circle(Point(x,y),radius)
+    pocket6.setFill("black")
     
     rect.draw(win)
     rect2.draw(win)
-    pocket.draw(win)
-
+    pocket1.draw(win)
+    pocket2.draw(win)
+    pocket3.draw(win)
+    pocket4.draw(win)
+    pocket5.draw(win)
+    pocket6.draw(win)
+    
 def createBall(x,y,radius,color,win):
     ball = Circle(Point(x,y),radius)
     ball.setFill(color)
