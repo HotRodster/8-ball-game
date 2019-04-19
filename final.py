@@ -12,12 +12,10 @@ WIDTH = 654
 HEIGHT = 600
 def main():
     win = GraphWin("Example", WIDTH,HEIGHT)
-    win.yUp()
+    win.yUp()    
 
-    
-
-    drawTable(win)
-    playGame(win)
+    dim = drawTable(win)
+    playGame(win,dim)
     win.getMouse()
     win.close()
 
@@ -77,6 +75,7 @@ def drawTable(win):
     pocket4.draw(win)
     pocket5.draw(win)
     pocket6.draw(win)
+    return [x0,y0,xf,yf]
     
 def createBall(x,y,radius,color,win):
     ball = Circle(Point(x,y),radius)
@@ -85,7 +84,7 @@ def createBall(x,y,radius,color,win):
     ball.draw(win)
     return ball
 
-def check(balls,velocities):
+def check(balls,velocities,dim):
     """
     num = 0
     for ball in balls:
@@ -99,24 +98,25 @@ def check(balls,velocities):
     y = balls.getCenter().getY()
     radius = balls.getRadius()
 
-    if x + radius >= WIDTH or x - radius <= 0:
+    if x + radius >= dim[2] or x - radius <= dim[0]:
         velocities[0] *= -1
 
-    if y + radius >= HEIGHT or y - radius <= 0:
+    if y + radius >= dim[3] or y - radius <= dim[1]:
         velocities[1] *= -1
     return velocities
 
-def playGame(win):
+def playGame(win,dim):
     x = 327
     y = 300
-    radius = 10
+    #scratc
+    radius = (1.125/114)*WIDTH
     color = "white"
     ball = createBall(x,y,radius,color,win)
     v = [3,3]
     point = win.checkMouse()
     while point == None:
         ball.move(v[0],v[1])
-        v = check(ball,v)
+        v = check(ball,v,dim)
         time.sleep(1.0/60)
         point = win.checkMouse()
     
