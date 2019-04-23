@@ -87,23 +87,38 @@ def createBall(x,y,radius,color,win):
     return ball
 
 def check(balls,velocities,dim):
+    savedIndexes = []
     num = 0
     radius = balls[0].getRadius()
     for ball in balls:
-        x = ball.getCenter().getX()
-        y = ball.getCenter().getY()
-        if x + radius >= dim[2] or x - radius <= dim[0]:
-            velocities[num][0] *= -1
-        if y + radius >= dim[3] or y - radius <= dim[1]:
-            velocities[num][1] *= -1
+        if num not in savedIndexes:
+            x = ball.getCenter().getX()
+            y = ball.getCenter().getY()
+            v1x0 = velocities[num][0]
+            v1y0 = velocities[num][1]
+            if x + radius >= dim[2] or x - radius <= dim[0]:
+                velocities[num][0] *= -1
+            if y + radius >= dim[3] or y - radius <= dim[1]:
+                velocities[num][1] *= -1
             
-        for i in range(len(balls)):
-
-            if i != num:
-                newX = balls[i].getCenter.getX()
-                newY = balls[i].getCenter.getY()
-                distance = ((x-newX)**2 + (y-newY)**2)**0.5
-                #if distance <= radius:
+            for i in range(len(balls)):
+    
+                if i != num:
+                    v2x0 = velocities[i][0]
+                    v2y0 = velocities[i][1]
+                    newX = balls[i].getCenter.getX()
+                    newY = balls[i].getCenter.getY()
+                    distance = ((x-newX)**2 + (y-newY)**2)**0.5
+                    if distance <= 2*radius:
+                        v1x = v2x0
+                        v1y = v2y0
+                        v2x = v1x0
+                        v2y = v1y0
+                        velocities[num][0] = v1x
+                        velocities[num][1] = v1y
+                        velocities[i][0] = v2x
+                        velocities[i][1] = v2y
+                        savedIndexes.append(i) 
                     
         num += 1
         
