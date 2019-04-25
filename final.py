@@ -106,8 +106,8 @@ def check(balls,velocities,dim):
                 if i != num:
                     v2x0 = velocities[i][0]
                     v2y0 = velocities[i][1]
-                    newX = balls[i].getCenter.getX()
-                    newY = balls[i].getCenter.getY()
+                    newX = balls[i].getCenter().getX()
+                    newY = balls[i].getCenter().getY()
                     distance = ((x-newX)**2 + (y-newY)**2)**0.5
                     if distance <= 2*radius:
                         v1x = v2x0
@@ -128,7 +128,7 @@ def check(balls,velocities,dim):
     return velocities
 
 def drawBalls(win):
-    space = 2.0
+    space = 1.0
     radius = (1.125/114)*WIDTH
     main = createBall(0.28*WIDTH,HEIGHT/2,radius,"white",win)
     b1 = createBall(0.72 *WIDTH, HEIGHT/2,radius,"yellow",win)
@@ -163,17 +163,27 @@ def drawBalls(win):
 
 def playGame(win,dim):
     balls = drawBalls(win)
-    velocities = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]
+    velocities = [[8,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],
                   [0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
     radius = (1.125/114)*WIDTH
     
-    
+    point = win.checkMouse()
+    a = 0.2*9.8
     while point == None:
-        ball.move(v[0],v[1])
-        v = check(ball,v,dim)
+        num = 0
+        for ball in balls:
+            ball.move(velocities[num][0],velocities[num][1])
+            num += 1
+        velocities = check(balls,velocities,dim)
+        for v in velocities:
+            ax = a*v[0]/math.sqrt(v[0]**2 + v[1]**2)
+            ay = 
+            
+        
+            
         time.sleep(1.0/60)
         point = win.checkMouse()
-    
+        
 
 if __name__ == "__main__":
     main()
