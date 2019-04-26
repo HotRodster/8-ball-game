@@ -175,12 +175,13 @@ def playGame(win,dim):
             ball.move(velocities[num][0],velocities[num][1])
             num += 1
         velocities = check(balls,velocities,dim)
+        """
         for v in velocities:
             ax = a*v[0]/math.sqrt(v[0]**2 + v[1]**2)
             ay = 
             
         
-            
+            """
         time.sleep(1.0/60)
         point = win.checkMouse()
         
