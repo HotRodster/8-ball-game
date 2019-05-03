@@ -7,13 +7,16 @@ ASSIGNMENT #
 Example
 """
 from graphics import*
+import time
 import math
 WIDTH = 654.0
 HEIGHT = 600.0
+TIMEMOD = 100
 def main():
     win = GraphWin("Example", WIDTH,HEIGHT)
     win.yUp()    
 
+    
     dim = drawTable(win)
     playGame(win,dim)
     win.getMouse()
@@ -123,8 +126,6 @@ def check(balls,velocities,dim):
         num += 1
         
     
-
-    
     return velocities
 
 def drawBalls(win):
@@ -159,30 +160,61 @@ def drawBalls(win):
     b15 = createBall(b2.getCenter().getX(),HEIGHT/2 - 4*radius - 2*space, radius
                      ,"brown",win)
 
+
     return [main,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15]
+
+def findVelocity(ball,win):
+    point = win.getMouse()
+    x0 = ball.getCenter().getX()
+    xf = point.getX()
+    y0 = ball.getCenter().getY()
+    yf = point.getY()
+
+    vx = xf - x0
+    vy = yf - y0
+    return vx,vy
+    
 
 def playGame(win,dim):
     balls = drawBalls(win)
-    velocities = [[8,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],
+    vx0, vy0 = findVelocity(balls[0],win)
+    vx0 /= TIMEMOD
+    vy0 /= TIMEMOD
+    velocities = [[vx0,vy0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],
                   [0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
     radius = (1.125/114)*WIDTH
     
     point = win.checkMouse()
-    a = 0.2*9.8
+    a = 0.005*9.8/TIMEMOD**2
     while point == None:
         num = 0
         for ball in balls:
             ball.move(velocities[num][0],velocities[num][1])
             num += 1
-        velocities = check(balls,velocities,dim)
-        """
-        for v in velocities:
-            ax = a*v[0]/math.sqrt(v[0]**2 + v[1]**2)
-            ay = 
-            
         
-            """
-        time.sleep(1.0/60)
+        velocities = check(balls,velocities,dim)
+        time.sleep(1.0/TIMEMOD)
+        for v in velocities:
+            if v[0]**2 + v[1]**2 > 0:
+                ax = a*v[0]/math.sqrt(v[0]**2 + v[1]**2)
+                ay = a*v[1]/math.sqrt(v[0]**2 + v[1]**2)
+
+                if v[0] > 0 and v[0] - ax <0:
+                    v[0] = 0
+                elif v[0] < 0 and v[0] - ax > 0:
+                    v[0] = 0
+                else:
+                    v[0] -= ax
+
+                if v[1] > 0 and v[1] - ay <0:
+                    v[1] = 0
+                elif v[1] < 0 and v[1] - ay > 0:
+                    v[1] = 0
+                else:
+                    v[1] -= ay
+
+                  
+        
         point = win.checkMouse()
         
 
