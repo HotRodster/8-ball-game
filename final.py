@@ -11,7 +11,7 @@ import time
 import math
 WIDTH = 654.0
 HEIGHT = 600.0
-TIMEMOD = 100
+TIMEMOD = 1
 def main():
     win = GraphWin("Example", WIDTH,HEIGHT)
     win.yUp()    
@@ -21,6 +21,12 @@ def main():
     playGame(win,dim)
     win.getMouse()
     win.close()
+
+"""
+def checkHole(holes,balls):
+    #for loop here
+
+"""
 
 def drawTable(win):
     brown = color_rgb(101,53,51)
@@ -185,7 +191,7 @@ def playGame(win,dim):
     radius = (1.125/114)*WIDTH
     
     point = win.checkMouse()
-    a = 0.005*9.8/TIMEMOD**2
+    a = 0.005*9.8/(TIMEMOD**2)
     while point == None:
         num = 0
         for ball in balls:
@@ -193,7 +199,7 @@ def playGame(win,dim):
             num += 1
         
         velocities = check(balls,velocities,dim)
-        time.sleep(1.0/TIMEMOD)
+        time.sleep(1.0/60*TIMEMOD)
         for v in velocities:
             if v[0]**2 + v[1]**2 > 0:
                 ax = a*v[0]/math.sqrt(v[0]**2 + v[1]**2)
