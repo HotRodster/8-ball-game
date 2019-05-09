@@ -119,10 +119,33 @@ def check(balls,velocities,dim):
                     newY = balls[i].getCenter().getY()
                     distance = ((x-newX)**2 + (y-newY)**2)**0.5
                     if distance <= 2*radius:
-                        v1x = v2x0
-                        v1y = v2y0
-                        v2x = v1x0
-                        v2y = v1y0
+                        v1 = (v1x0**2 + v1y0**2)**0.5
+                        v2 = (v2x0**2 + v2y0**2)**0.5
+                        m1 = (newY - y) / (newX - x)
+                        m2 = -1/m1
+                        if v1 == 0:
+                            a2 = math.atan(m2)
+                            a1 = math.atan(m1)
+                            v2 /= 2
+                            v1 = v2
+                            v1y = v1 * math.sin(a1)
+                            v1x = v1 * math.cos(a1)
+                            v2y = v2 * math.sin(a2)
+                            v2x = v2 * math.cos(a2)
+                        elif v2 == 0:
+                            a2 = math.atan(m2)
+                            a1 = math.atan(m1)
+                            v1 /= 2
+                            v2 = v1
+                            v1y = v1*math.sin(a1)
+                            v1x = v1*math.cos(a1)
+                            v2y = v2*math.sin(a2)
+                            v2x = v2*math.cos(a2)
+                        else:
+                            v1x = v2x0
+                            v1y = v2y0
+                            v2x = v1x0
+                            v2y = v1y0
                         velocities[num][0] = v1x
                         velocities[num][1] = v1y
                         velocities[i][0] = v2x
@@ -184,22 +207,25 @@ def findVelocity(ball,win):
 def playGame(win,dim):
     balls = drawBalls(win)
     vx0, vy0 = findVelocity(balls[0],win)
-    vx0 /= TIMEMOD
-    vy0 /= TIMEMOD
     velocities = [[vx0,vy0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],
                   [0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
     radius = (1.125/114)*WIDTH
     
     point = win.checkMouse()
-    a = 0.005*9.8/(TIMEMOD**2)
+    a = 0.005*9.8
     while point == None:
         num = 0
         for ball in balls:
-            ball.move(velocities[num][0],velocities[num][1])
+            n = 0
+            while n <= TIMEMOD:
+                #start here
+                ball.move(velocities[num][0]/TIMEMOD,velocities[num][1]/TIMEMOD)
+                n += 1
+                
             num += 1
         
         velocities = check(balls,velocities,dim)
-        time.sleep(1.0/60*TIMEMOD)
+        time.sleep(1.0/60)
         for v in velocities:
             if v[0]**2 + v[1]**2 > 0:
                 ax = a*v[0]/math.sqrt(v[0]**2 + v[1]**2)
