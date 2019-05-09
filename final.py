@@ -11,7 +11,7 @@ import time
 import math
 WIDTH = 654.0
 HEIGHT = 600.0
-TIMEMOD = 1
+TIMEMOD = 100
 def main():
     win = GraphWin("Example", WIDTH,HEIGHT)
     win.yUp()    
@@ -202,7 +202,34 @@ def findVelocity(ball,win):
     vx = xf - x0
     vy = yf - y0
     return vx,vy
-    
+
+def checkTouch(balls):
+    radius = balls[0].getRadius()
+    num = 0
+    for ball in balls:
+        x = ball.getCenter().getX()
+        y = ball.getCenter().getY()
+        for i in range(len(balls)):
+            if i != num:
+                newX = balls[i].getCenter().getX()
+                newY = balls[i].getCenter().getY()
+                distance = ((x-newX)**2 + (y-newY)**2)**0.5
+                if distance <= 2*radius:
+                    return True
+        num += 1
+    return False
+
+def checkWall(ball,dim):
+    x = ball.getCenter().getX()
+    y = ball.getCenter().getY()
+    radius = ball.getRadius()
+    if x + radius >= dim[2] or x - radius <= dim[0]:
+        return True
+
+    if y + radius >= dim[3] or y - radius <= dim[1]:
+        return True
+
+    return False
 
 def playGame(win,dim):
     balls = drawBalls(win)
@@ -217,11 +244,13 @@ def playGame(win,dim):
         num = 0
         for ball in balls:
             n = 0
-            while n <= TIMEMOD:
-                #start here
-                ball.move(velocities[num][0]/TIMEMOD,velocities[num][1]/TIMEMOD)
-                n += 1
-                
+            k = 0
+            if velocities[num][0] != 0 or velocities[num][1] != 0:
+                while n <= TIMEMOD and k == 0:
+                    ball.move(velocities[num][0]/TIMEMOD,velocities[num][1]/TIMEMOD)
+                    n += 1
+                    if checkTouch(balls) or checkWall(ball,dim):
+                        k += 1
             num += 1
         
         velocities = check(balls,velocities,dim)
